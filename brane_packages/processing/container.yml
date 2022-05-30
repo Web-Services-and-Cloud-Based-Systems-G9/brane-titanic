@@ -1,0 +1,51 @@
+name: titanicprocessing
+version: 1.0.0
+kind: compute
+
+dependencies:
+  - python3
+  - python3-pip
+  - python3-yaml
+
+install:
+  - pip3 install -r ./requirements.txt
+
+files:
+  - main.py
+
+entrypoint:
+  kind: task
+  exec: main.py
+
+actions:
+  'drop_unuseful_columns':
+    command:
+      args:
+        - drop_unuseful_columns
+
+    input:
+
+      - type: string
+        name: train_file
+
+      - type: string
+        name: test_file
+
+      - type: string[]
+        name: unuseful_columns
+
+      - type: boolean
+        name: overwrite
+
+      - type: string
+        name: output_train
+
+      - type: string
+        name: output_test
+
+    output:
+      - type: string
+        name: output_train
+
+      - type: string
+        name: output_test
