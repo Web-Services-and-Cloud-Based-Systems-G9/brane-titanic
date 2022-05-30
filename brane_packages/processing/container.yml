@@ -47,8 +47,5 @@ actions:
         name: output_test
 
     output:
-      - type: string
+      - type: string[]
         name: output_train
-
-      - type: string
-        name: output_test
