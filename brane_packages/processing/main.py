@@ -16,12 +16,12 @@ def read_datasets(train_file: str, test_file: str) -> Tuple[pd.DataFrame, pd.Dat
 
 def write_datasets(train: pd.DataFrame, test: pd.DataFrame, overwrite: bool, output_train: str, output_test: str) -> Tuple[str, str]:
     output_train, output_test = get_file_names(overwrite, output_train, output_test)
-    train.to_csv(output_train, index=False)
-    test.to_csv(output_test, index=False)
+    # train.to_csv(output_train, index=False)
+    # test.to_csv(output_test, index=False)
     return output_train, output_test
 
 
-def get_file_names(overwrite: bool, output_train: str, output_test: str):
+def get_file_names(overwrite: bool, output_train: str, output_test: str) -> Tuple[str, str]:
     if overwrite:
         return output_train, output_test
     else:
