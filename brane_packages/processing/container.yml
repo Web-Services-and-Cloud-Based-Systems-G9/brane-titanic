@@ -18,7 +18,7 @@ files:
 
 entrypoint:
   kind: task
-  exec: python3 main.py
+  exec: main.py
 
 actions:
   'drop_unuseful_columns':
