@@ -48,4 +48,4 @@ actions:
 
     output:
       - type: string[]
-        name: output_train
+        name: output
