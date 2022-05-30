@@ -137,4 +137,6 @@ if __name__ == "__main__":
         arg_field_to_predict = os.environ["FIELD_TO_PREDICT"]
         output = train_and_predict(arg_train_file, arg_test_file, arg_field_to_predict)
         print(yaml.dump({"output": output}))
+    else:
+        print(yaml.dump({"output": (command, "dummy.csv")}))
 
