@@ -117,7 +117,7 @@ if __name__ == "__main__":
         arg_output_train = os.environ["OUTPUT_TRAIN"]
         arg_output_test = os.environ["OUTPUT_TEST"]
         output = drop_unuseful_columns(arg_train_file, arg_test_file, arg_unuseful_columns, arg_overwrite, arg_output_train, arg_output_test)
-        print(yaml.dump({"output": output}))
+        print(yaml.dump({"output": list(output)}))
 
     elif command == "transform_fields":
         arg_train_file = os.environ["TRAIN_FILE"]
