@@ -12,6 +12,7 @@ install:
 
 files:
   - main.py
+  - requirements.txt
 
 entrypoint:
   kind: task
