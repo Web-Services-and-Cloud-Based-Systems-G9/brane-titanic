@@ -13,8 +13,8 @@ install:
 files:
   - main.py
   - requirements.txt
-  - ./data/test.csv
-  - ./data/train.csv
+  - test.csv
+  - train.csv
 
 entrypoint:
   kind: task
