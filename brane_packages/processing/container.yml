@@ -13,6 +13,8 @@ install:
 files:
   - main.py
   - requirements.txt
+  - ./data/test.csv
+  - ./data/train.csv
 
 entrypoint:
   kind: task
@@ -32,7 +34,7 @@ actions:
       - type: string
         name: test_file
 
-      - type: string[]
+      - type: string
         name: unuseful_columns
 
       - type: boolean

@@ -108,9 +108,10 @@ if __name__ == "__main__":
     if command == "drop_unuseful_columns":
         arg_train_file = os.environ["TRAIN_FILE"]
         arg_test_file = os.environ["TEST_FILE"]
-        arg_unuseful_columns = [
-            os.environ[f"UNUSEFUL_COLUMNS{i}"] for i in range(int(os.environ["UNUSEFUL_COLUMNS"]))
-        ]
+        # arg_unuseful_columns = [
+        #     os.environ[f"UNUSEFUL_COLUMNS{i}"] for i in range(int(os.environ["UNUSEFUL_COLUMNS"]))
+        # ]
+        arg_unuseful_columns = os.environ["UNUSEFUL_COLUMNS"] # Test
         arg_overwrite = bool(os.environ["OVERWRITE"])
         arg_output_train = os.environ["OUTPUT_TRAIN"]
         arg_output_test = os.environ["OUTPUT_TEST"]
