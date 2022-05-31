@@ -1,7 +1,6 @@
 import os
 import yaml
 from brane_packages.visualization.main import plot_distribution_wrapper, bar_chart_compare_wrapper, feature_group_bar_chart_wrapper
-from brane_packages.processing.main import train_and_predict_wrapper, transform_fields_wrapper, drop_unuseful_columns_wrapper
 import pytest
 
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -33,6 +32,27 @@ def test_bar_chart_compare_wrapper():
     os.environ["PLOT_TITLE"] = "Survival rate by sex and class"
     try:
         yaml_result = bar_chart_compare_wrapper()
+        test_result = yaml.safe_load(yaml_result)
+        assert(
+            "output" in test_result and
+            isinstance(test_result["output"], str) and
+            test_result["output"].endswith('.png')
+        )
+    except Exception as e:
+        assert False
+
+
+def test_feature_group_bar_chart_wrapper():
+    os.environ["DATA"] = DATA_PATH
+    os.environ["FEATURE_Y_BINARY"] = "Survived"
+    os.environ["FEATURE_Y_INDEX"] = "2"
+    os.environ["FEATURE_Y_INDEX0"] = "Passenger Survived"
+    os.environ["FEATURE_Y_INDEX1"] = "Passenger Died"
+    os.environ["FEATURE"] = "Pclass"
+    os.environ["Y_LABEL"] = "# of passengers"
+    os.environ["PLOT_TITLE"] = "# of passengers surviving by class"
+    try:
+        yaml_result = feature_group_bar_chart_wrapper()
         test_result = yaml.safe_load(yaml_result)
         assert(
             "output" in test_result and

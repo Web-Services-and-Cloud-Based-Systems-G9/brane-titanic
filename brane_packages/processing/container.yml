@@ -68,6 +68,9 @@ actions:
 
       - type: string
         name: field_to_predict
+
+      - type: string[]
+        name: fields_to_use
     output:
       - type: real
         name: output

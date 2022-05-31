@@ -23,7 +23,9 @@ def write_datasets(train: pd.DataFrame, test: pd.DataFrame, train_fn: str, test_
 
 
 def get_file_names(train: str, test: str) -> Tuple[str, str]:
-    return str(uuid.uuid4()) + '_' + train, str(uuid.uuid4()) + '_' + test
+    new_train_fn = str(uuid.uuid4()) + ".csv"
+    new_test_fn = str(uuid.uuid4()) + ".csv"
+    return new_train_fn, new_test_fn
 
 
 def drop_unuseful_columns(train_file: str, test_file: str, unuseful_columns: List[str]) -> Tuple[str, str]:
@@ -68,32 +70,34 @@ def transform_fields(train_file: str, test_file: str, fields_to_transform: List[
     if "Fsize" in fields_to_transform:
         train["Fsize"] = train["SibSp"] + train["Parch"] + 1
         test["Fsize"] = test["SibSp"] + test["Parch"] + 1
-    output_train, output_test = write_datasets(train, test)
+    output_train, output_test = write_datasets(train, test, train_file, test_file)
     return output_train, output_test
 
 
-def train_and_predict(train_file: str, test_file: str, field_to_predict: str) -> Tuple[float, List[int]]:
+def train_and_predict(train_file: str, test_file: str, field_to_predict: str, fields_to_use: List[str]) -> Tuple[float, List[int]]:
     train, test = read_datasets(train_file, test_file)
-    X_train = train
-    Y_train = train[field_to_predict] # "Survived"
-    X_test = test.copy()
+    Y_train = train[field_to_predict]
+    X_train = train.drop(field_to_predict, axis=1)
+    X_train = X_train[fields_to_use]
+    X_test = test[fields_to_use].copy()
     decision_tree = DecisionTreeClassifier()
     decision_tree.fit(X_train, Y_train)
     Y_pred = decision_tree.predict(X_test)
     acc_decision_tree = round(decision_tree.score(X_train, Y_train) * 100, 2)
-    print("Training Accuracy: {}%".format(acc_decision_tree))
-    return acc_decision_tree #, Y_pred
+    # print("Training Accuracy: {}%".format(acc_decision_tree))
+    return float(acc_decision_tree) #, Y_pred
 
 
 def drop_unuseful_columns_wrapper():
     arg_train_file = os.environ["TRAIN_FILE"]
     arg_test_file = os.environ["TEST_FILE"]
-    # arg_unuseful_columns = [
-    #     os.environ[f"UNUSEFUL_COLUMNS{i}"] for i in range(int(os.environ["UNUSEFUL_COLUMNS"]))
-    # ]
-    arg_unuseful_columns = os.environ["UNUSEFUL_COLUMNS"]  # Test
+    arg_unuseful_columns = [
+        os.environ[f"UNUSEFUL_COLUMNS{i}"] for i in range(int(os.environ["UNUSEFUL_COLUMNS"]))
+    ]
     output = drop_unuseful_columns(arg_train_file, arg_test_file, arg_unuseful_columns)
-    print(yaml.dump({"output": list(output)}))
+    yaml_result = yaml.dump({"output": list(output)})
+    print(yaml_result)
+    return yaml_result
 
 
 def transform_fields_wrapper():
@@ -103,27 +107,27 @@ def transform_fields_wrapper():
         os.environ[f"FIELDS_TO_TRANSFORM{i}"] for i in range(int(os.environ["FIELDS_TO_TRANSFORM"]))
     ]
     output = transform_fields(arg_train_file, arg_test_file, arg_fields_to_transform)
-    print(yaml.dump({"output": list(output)}))
+    yaml_result = yaml.dump({"output": list(output)})
+    print(yaml_result)
+    return yaml_result
 
 
 def train_and_predict_wrapper():
     arg_train_file = os.environ["TRAIN_FILE"]
     arg_test_file = os.environ["TEST_FILE"]
     arg_field_to_predict = os.environ["FIELD_TO_PREDICT"]
-    output = train_and_predict(arg_train_file, arg_test_file, arg_field_to_predict)
-    print(yaml.dump({"output": output}))
+    arg_fields_to_use = [
+        os.environ[f"FIELDS_TO_USE{i}"] for i in range(int(os.environ["FIELDS_TO_USE"]))
+    ]
+    output = train_and_predict(arg_train_file, arg_test_file, arg_field_to_predict, arg_fields_to_use)
+    yaml_result = yaml.dump({"output": output})
+    print(yaml_result)
+    return yaml_result
 
 
 if __name__ == "__main__":
-    command = os.environ["COMMAND"]
-    if len(sys.argv) > 1:
-        command = sys.argv[1]
+    command = sys.argv[1]
 
-    functions = {
-        "drop_unuseful_columns": drop_unuseful_columns,
-        "transform_fields": transform_fields,
-        "train_and_predict": train_and_predict
-    }
     if command == "drop_unuseful_columns":
         drop_unuseful_columns_wrapper()
 
@@ -132,5 +136,3 @@ if __name__ == "__main__":
 
     elif command == "train_and_predict":
         train_and_predict_wrapper()
-
-

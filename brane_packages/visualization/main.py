@@ -101,15 +101,8 @@ def feature_group_bar_chart_wrapper():
 
 
 if __name__ == "__main__":
-    command = os.environ["COMMAND"]
-    if len(sys.argv) > 1:
-        command = sys.argv[1]
+    command = sys.argv[1]
 
-    functions = {
-        "plot_distribution": plot_distribution,
-        "bar_chart_compare": bar_chart_compare,
-        "feature_group_bar_chart": feature_group_bar_chart
-    }
     if command == "plot_distribution":
         plot_distribution_wrapper()
 
@@ -118,5 +111,3 @@ if __name__ == "__main__":
 
     elif command == "feature_group_bar_chart":
         feature_group_bar_chart_wrapper()
-
-
