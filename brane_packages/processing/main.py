@@ -85,6 +85,35 @@ def train_and_predict(train_file: str, test_file: str, field_to_predict: str) ->
     return acc_decision_tree #, Y_pred
 
 
+def drop_unuseful_columns_wrapper():
+    arg_train_file = os.environ["TRAIN_FILE"]
+    arg_test_file = os.environ["TEST_FILE"]
+    # arg_unuseful_columns = [
+    #     os.environ[f"UNUSEFUL_COLUMNS{i}"] for i in range(int(os.environ["UNUSEFUL_COLUMNS"]))
+    # ]
+    arg_unuseful_columns = os.environ["UNUSEFUL_COLUMNS"]  # Test
+    output = drop_unuseful_columns(arg_train_file, arg_test_file, arg_unuseful_columns)
+    print(yaml.dump({"output": list(output)}))
+
+
+def transform_fields_wrapper():
+    arg_train_file = os.environ["TRAIN_FILE"]
+    arg_test_file = os.environ["TEST_FILE"]
+    arg_fields_to_transform = [
+        os.environ[f"FIELDS_TO_TRANSFORM{i}"] for i in range(int(os.environ["FIELDS_TO_TRANSFORM"]))
+    ]
+    output = transform_fields(arg_train_file, arg_test_file, arg_fields_to_transform)
+    print(yaml.dump({"output": list(output)}))
+
+
+def train_and_predict_wrapper():
+    arg_train_file = os.environ["TRAIN_FILE"]
+    arg_test_file = os.environ["TEST_FILE"]
+    arg_field_to_predict = os.environ["FIELD_TO_PREDICT"]
+    output = train_and_predict(arg_train_file, arg_test_file, arg_field_to_predict)
+    print(yaml.dump({"output": output}))
+
+
 if __name__ == "__main__":
     command = os.environ["COMMAND"]
     if len(sys.argv) > 1:
@@ -96,29 +125,12 @@ if __name__ == "__main__":
         "train_and_predict": train_and_predict
     }
     if command == "drop_unuseful_columns":
-        arg_train_file = os.environ["TRAIN_FILE"]
-        arg_test_file = os.environ["TEST_FILE"]
-        # arg_unuseful_columns = [
-        #     os.environ[f"UNUSEFUL_COLUMNS{i}"] for i in range(int(os.environ["UNUSEFUL_COLUMNS"]))
-        # ]
-        arg_unuseful_columns = os.environ["UNUSEFUL_COLUMNS"] # Test
-        output = drop_unuseful_columns(arg_train_file, arg_test_file, arg_unuseful_columns)
-        print(yaml.dump({"output": list(output)}))
+        drop_unuseful_columns_wrapper()
 
     elif command == "transform_fields":
-        arg_train_file = os.environ["TRAIN_FILE"]
-        arg_test_file = os.environ["TEST_FILE"]
-        arg_fields_to_transform = [
-            os.environ[f"FIELDS_TO_TRANSFORM{i}"] for i in range(int(os.environ["FIELDS_TO_TRANSFORM"]))
-        ]
-        output = drop_unuseful_columns(arg_train_file, arg_test_file, arg_fields_to_transform)
-        print(yaml.dump({"output": list(output)}))
+        transform_fields_wrapper()
 
     elif command == "train_and_predict":
-        arg_train_file = os.environ["TRAIN_FILE"]
-        arg_test_file = os.environ["TEST_FILE"]
-        arg_field_to_predict = os.environ["FIELD_TO_PREDICT"]
-        output = train_and_predict(arg_train_file, arg_test_file, arg_field_to_predict)
-        print(yaml.dump({"output": output}))
+        train_and_predict_wrapper()
 
 

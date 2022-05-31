@@ -59,6 +59,41 @@ def feature_group_bar_chart(data: str, feature_y_binary: str, feature_y_index: L
     return file_name
 
 
+def plot_distribution_wrapper():
+    arg_data = os.environ["DATA"]
+    arg_feature = os.environ["FEATURE"]
+    arg_plot_title = os.environ["PLOT_TITLE"]
+    output = plot_distribution(arg_data, arg_feature, arg_plot_title)
+    yaml_result = yaml.dump({"output": output})
+    print(yaml_result)
+    return yaml_result
+
+
+def bar_chart_compare_wrapper():
+    arg_data = os.environ["DATA"]
+    arg_feature_y = os.environ["FEATURE_Y"]
+    arg_feature_1 = os.environ["FEATURE_1"]
+    arg_feature_2 = os.environ["FEATURE_2"]
+    arg_y_label = os.environ["Y_LABEL"]
+    arg_plot_title = os.environ["PLOT_TITLE"]
+    output = bar_chart_compare(arg_data, arg_feature_y, arg_feature_1, arg_feature_2, arg_y_label, arg_plot_title)
+    print(yaml.dump({"output": output}))
+
+
+def feature_group_bar_chart_wrapper():
+    arg_data = os.environ["DATA"]
+    arg_feature_y_binary = os.environ["FEATURE_Y_BINARY"]
+    arg_feature = os.environ["FEATURE"]
+    arg_y_label = os.environ["Y_LABEL"]
+    arg_plot_title = os.environ["PLOT_TITLE"]
+    arg_feature_y_index = [
+        os.environ[f"FEATURE_Y_INDEX{i}"] for i in range(int(os.environ["FEATURE_Y_INDEX"]))
+    ]
+    output = feature_group_bar_chart(arg_data, arg_feature_y_binary, arg_feature_y_index, arg_feature, arg_y_label,
+                                     arg_plot_title)
+    print(yaml.dump({"output": output}))
+
+
 if __name__ == "__main__":
     command = os.environ["COMMAND"]
     if len(sys.argv) > 1:
@@ -70,32 +105,12 @@ if __name__ == "__main__":
         "feature_group_bar_chart": feature_group_bar_chart
     }
     if command == "plot_distribution":
-        arg_data = os.environ["DATA"]
-        arg_feature = os.environ["FEATURE"]
-        arg_plot_title = os.environ["PLOT_TITLE"]
-        output = plot_distribution(arg_data, arg_feature, arg_plot_title)
-        print(yaml.dump({"output": output}))
+        plot_distribution_wrapper()
 
     elif command == "bar_chart_compare":
-        arg_data = os.environ["DATA"]
-        arg_feature_y = os.environ["FEATURE_Y"]
-        arg_feature_1 = os.environ["FEATURE_1"]
-        arg_feature_2 = os.environ["FEATURE_2"]
-        arg_y_label = os.environ["Y_LABEL"]
-        arg_plot_title = os.environ["PLOT_TITLE"]
-        output = bar_chart_compare(arg_data, arg_feature_y, arg_feature_1, arg_feature_2, arg_y_label, arg_plot_title)
-        print(yaml.dump({"output": output}))
+        bar_chart_compare_wrapper()
 
     elif command == "feature_group_bar_chart":
-        arg_data = os.environ["DATA"]
-        arg_feature_y_binary = os.environ["FEATURE_Y_BINARY"]
-        arg_feature = os.environ["FEATURE"]
-        arg_y_label = os.environ["Y_LABEL"]
-        arg_plot_title = os.environ["PLOT_TITLE"]
-        arg_feature_y_index = [
-            os.environ[f"FEATURE_Y_INDEX{i}"] for i in range(int(os.environ["FEATURE_Y_INDEX"]))
-        ]
-        output = feature_group_bar_chart(arg_data, arg_feature_y_binary, arg_feature_y_index, arg_feature, arg_y_label, arg_plot_title)
-        print(yaml.dump({"output": output}))
+        feature_group_bar_chart_wrapper()
 
 
