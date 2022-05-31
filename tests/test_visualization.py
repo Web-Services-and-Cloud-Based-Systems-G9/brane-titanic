@@ -23,3 +23,22 @@ def test_plot_distribution_wrapper():
     except Exception as e:
         assert False
 
+
+def test_bar_chart_compare_wrapper():
+    os.environ["DATA"] = DATA_PATH
+    os.environ["FEATURE_Y"] = "Survived"
+    os.environ["FEATURE_1"] = "Pclass"
+    os.environ["FEATURE_2"] = "Sex"
+    os.environ["Y_LABEL"] = "Survival Rate"
+    os.environ["PLOT_TITLE"] = "Survival rate by sex and class"
+    try:
+        yaml_result = bar_chart_compare_wrapper()
+        test_result = yaml.safe_load(yaml_result)
+        assert(
+            "output" in test_result and
+            isinstance(test_result["output"], str) and
+            test_result["output"].endswith('.png')
+        )
+    except Exception as e:
+        assert False
+

@@ -38,6 +38,8 @@ def bar_chart_compare(data: str, feature_y: str, feature_1: str, feature_2: str,
     f_size = (7, 7)
     plt.figure(figsize=f_size)
     plt.title(plot_title)
+    if feature_2 == "None":
+        feature_2 = None
     sns.barplot(x=feature_1, y=feature_y, hue=feature_2, ci=None, data=data).set_ylabel(y_label)
     file_name = generate_figure_name()
     plt.savefig(file_name)
@@ -77,7 +79,9 @@ def bar_chart_compare_wrapper():
     arg_y_label = os.environ["Y_LABEL"]
     arg_plot_title = os.environ["PLOT_TITLE"]
     output = bar_chart_compare(arg_data, arg_feature_y, arg_feature_1, arg_feature_2, arg_y_label, arg_plot_title)
-    print(yaml.dump({"output": output}))
+    yaml_result = yaml.dump({"output": output})
+    print(yaml_result)
+    return yaml_result
 
 
 def feature_group_bar_chart_wrapper():
@@ -91,7 +95,9 @@ def feature_group_bar_chart_wrapper():
     ]
     output = feature_group_bar_chart(arg_data, arg_feature_y_binary, arg_feature_y_index, arg_feature, arg_y_label,
                                      arg_plot_title)
-    print(yaml.dump({"output": output}))
+    yaml_result = yaml.dump({"output": output})
+    print(yaml_result)
+    return yaml_result
 
 
 if __name__ == "__main__":
