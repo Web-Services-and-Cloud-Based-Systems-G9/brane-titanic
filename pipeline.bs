@@ -1,0 +1,11 @@
+import titanicviz;
+import titanicprocessing;
+
+let train := "train.csv";
+let test := "test.csv";
+
+// Data visualization
+let feature := "Age";
+let plot_title := "Age Distribution of Passengers";
+plot_distribution(train, feature, plot_title);
+

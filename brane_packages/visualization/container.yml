@@ -1,6 +1,6 @@
-name: wordcloud
-version: 1.0.0
-kind: compute
+name: titanicviz
+version: 1.0.1
+kind: ecu
 
 dependencies:
   - python3
@@ -8,28 +8,84 @@ dependencies:
   - python3-yaml
 
 install:
-  - pip3 install wordcloud
+  - pip3 install -r ./requirements.txt
 
 files:
-  - run.py
+  - main.py
+  - requirements.txt
+  - test.csv
+  - train.csv
 
 entrypoint:
   kind: task
-  exec: run.py
+  exec: main.py
 
 actions:
-  'create':
+  'plot_distribution':
     command:
       args:
-        - create
-
+        - plot_distribution
     input:
-      - type: string[]
-        name: words
+      - type: string
+        name: data
 
       - type: string
-        name: file
+        name: feature
 
+      - type: string
+        name: plot_title
+    output:
+      - type: string
+        name: output
+
+  'bar_chart_compare':
+    command:
+      args:
+        - bar_chart_compare
+    input:
+      - type: string
+        name: data
+
+      - type: string
+        name: feature_y
+
+      - type: string
+        name: feature_1
+
+      - type: string
+        name: feature_2
+
+      - type: string
+        name: y_label
+
+      - type: string
+        name: plot_title
+    output:
+      - type: string
+        name: output
+
+  'feature_group_bar_chart':
+    command:
+      args:
+        - feature_group_bar_chart
+    input:
+      - type: string
+        name: data
+
+      - type: string
+        name: feature_y_binary
+
+      - type: string[]
+        name: feature_y_index
+
+      - type: string
+        name: feature
+
+      - type: string
+        name: y_label
+
+      - type: string
+        name: plot_title
     output:
       - type: string
         name: output

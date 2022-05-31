@@ -25,9 +25,41 @@ actions:
     command:
       args:
         - drop_unuseful_columns
-
     input:
+      - type: string
+        name: train_file
 
+      - type: string
+        name: test_file
+
+      - type: string[]
+        name: unuseful_columns
+    output:
+      - type: string[]
+        name: output
+
+  'transform_fields':
+    command:
+      args:
+        - transform_fields
+    input:
+      - type: string
+        name: train_file
+
+      - type: string
+        name: test_file
+
+      - type: string[]
+        name: fields_to_transform
+    output:
+      - type: string[]
+        name: output
+
+  'train_and_predict':
+    command:
+      args:
+        - train_and_predict
+    input:
       - type: string
         name: train_file
 
@@ -35,17 +67,7 @@ actions:
         name: test_file
 
       - type: string
-        name: unuseful_columns
-
-      - type: boolean
-        name: overwrite
-
-      - type: string
-        name: output_train
-
-      - type: string
-        name: output_test
-
+        name: field_to_predict
     output:
-      - type: string[]
+      - type: real
         name: output
